@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - {{ block.super }} {% endblock %}
+
+{% block content %}
+<p>Десять последних надписей</p>
+{% for post in ten_last_posts %}
+<div class="card bg-transparent border-dark clearfix">
+  <div class="card-body">
+    <!-- responsive floated images -->
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="col-md-4 float-md-end mb-3 ms-md-3 img-fluid" alt="{{ post.fromplace }}">
+    {% else %}
+    <p></p>
+    {% endif %}
+    <p class="card-text">{{ post.text }}</p>
+    <p class="card-text">Откуда: {{ post.fromplace }}</p>
+    <p class="card-text">Кто прислал: {{ post.author.name }}</p>
+    <p class="card-text">Тема: {{ post.topic }}</p>
+  </div>
+</div>
+{% empty %}
+  <p>Не загрузились</p>
+{% endfor %}
+{% endblock %}
