@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import LastPosts
+from . import views 
 
 urlpatterns = [
-    path("", LastPosts.as_view()),
+    path("", views.LastPosts.as_view()),
+    path("submit/", views.new_post, name="new_post"),
 ]

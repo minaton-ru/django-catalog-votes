@@ -28,7 +28,7 @@ class Topic(models.Model):
         return self.name
 
 class Post(models.Model):
-    author = models.ForeignKey(Profile, on_delete=models.SET_DEFAULT, null=True, blank=True, default="Other")
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     text = models.TextField(max_length=2000)
     fromplace = models.TextField(max_length=50)
     image = models.ImageField(upload_to="uploads/%Y/%m/%d/", null=True, blank=True)
