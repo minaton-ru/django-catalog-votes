@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, FileInput
 from .models import Post
 
 class NewPostForm(ModelForm):
@@ -11,6 +11,9 @@ class NewPostForm(ModelForm):
             'image': 'Картинка',
             'category': 'Выберите общую категорию',
             'topic': 'Выберите тему из категории',
+        }
+        widgets = {
+            'image': FileInput(),
         }
         help_texts = {
             'image': 'Или надпись в виде картинки'
