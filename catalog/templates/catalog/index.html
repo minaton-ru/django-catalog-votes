@@ -17,6 +17,19 @@
     <p class="card-text">Откуда: {{ post.fromplace }}</p>
     <p class="card-text">Кто прислал: {{ post.author.name }}</p>
     <p class="card-text">Тема: {{ post.topic }}</p>
+    <form action="{% url 'post_upvoting' post.id %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" name="upvoting" value="{{ post.id }}">
+        {{ post.get_total_upvotes }}
+      </button>
+    </form>
+    {{ post.get_votes_result }}
+    <form action="{% url 'post_downvoting' post.id %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" name="downvoting" value="{{ post.id }}">
+        {{ post.get_total_downvotes }}
+      </button>
+    </form>
   </div>
 </div>
 {% empty %}

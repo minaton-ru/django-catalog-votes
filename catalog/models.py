@@ -35,7 +35,8 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, null=True, default="Other")
     topic = models.ForeignKey(Topic, on_delete=models.SET_DEFAULT, null=True, default="Other")
     published = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
+    upvotes = models.ManyToManyField(User, related_name='post_upvotes', blank=True)
+    downvotes = models.ManyToManyField(User, related_name='post_downvotes', blank=True)
     approved = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     
@@ -44,11 +45,14 @@ class Post(models.Model):
         verbose_name = 'Надпись'
         verbose_name_plural = 'Надписи'
     
-    def number_of_likes(self):
-        if self.likes.count() == 0:
-            return ''
-        else:
-            return self.likes.count()
+    def get_total_upvotes(self):
+        return self.upvotes.count()
+
+    def get_total_downvotes(self):
+        return self.downvotes.count()
+
+    def get_votes_result(self):
+        return self.upvotes.count() - self.downvotes.count()
 
     def __str__(self):
         return self.text
