@@ -20,7 +20,7 @@ def new_post(request):
         form = NewPostForm()
     return render(request, "catalog/submit.html", {"form": form})
 
-@login_required(redirect_field_name="redirect_after_voting")
+@login_required(redirect_field_name=None)
 def post_upvoting(request, post_id):
     if request.method == "POST":
         post = get_object_or_404(Post, pk=post_id)
@@ -33,7 +33,7 @@ def post_upvoting(request, post_id):
         post.save() 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-@login_required(redirect_field_name="redirect_after_voting")
+@login_required(redirect_field_name=None)
 def post_downvoting(request, post_id):
     if request.method == "POST":
         post = get_object_or_404(Post, pk=post_id)
