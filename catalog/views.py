@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView
-from .models import Post
+from .models import Post, Category, Topic
 from .forms import NewPostForm
 
 class LastPosts(ListView):
@@ -45,3 +45,18 @@ def post_downvoting(request, post_id):
                 post.upvotes.remove(request.user)
         post.save() 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def posts_list_category(request, category_slug):
+    category = get_object_or_404(Category, slug=category_slug)
+    category_id = category.id
+    posts = Post.objects.filter(category = category_id)  
+    context = {'posts': posts, 'category': category}
+    return render(request, "catalog/category.html", context)
+
+def posts_list_topic(request, category_slug, topic_slug):
+    category = get_object_or_404(Category, slug=category_slug)
+    topic = get_object_or_404(Topic, slug=topic_slug)
+    topic_id = topic.id
+    posts = Post.objects.filter(topic = topic_id)  
+    context = {'posts': posts, 'category': category, 'topic': topic}
+    return render(request, "catalog/topic.html", context)  

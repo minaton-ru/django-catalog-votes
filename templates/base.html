@@ -15,6 +15,11 @@
 </header>
 
 <div class="container content">
+{% if user.is_authenticated %}
+<p>Welcome {{ user.username }}! <a href="{% url 'account_logout' %}">Выйти</a></p>
+{% else %}
+<a href="{% url 'account_login' %}">Логин</a>
+{% endif %}
  <div class="row ps-1">
   <div class="col-9 content-main"> 
    {% block content %}
