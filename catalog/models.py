@@ -20,7 +20,7 @@ class Topic(models.Model):
     name = models.CharField('topic', max_length=20)
     slug = models.SlugField()
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT,
-                                 null=True, default="Other")
+                                 null=True, default=1)
 
     class Meta:
         ordering = ['id']
@@ -39,9 +39,9 @@ class Post(models.Model):
     image = models.ImageField(upload_to="uploads/%Y/%m/%d/",
                               null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT,
-                                 null=True, default="Other")
+                                 null=True, default=1)
     topic = models.ForeignKey(Topic, on_delete=models.SET_DEFAULT,
-                              null=True, default="Other")
+                              null=True, default=1)
     published = models.DateTimeField(auto_now_add=True)
     upvotes = models.ManyToManyField(User, related_name='post_upvotes',
                                      blank=True)
