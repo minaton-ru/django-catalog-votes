@@ -54,7 +54,7 @@ def post_downvoting(request, post_id):
 def posts_list_category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     category_id = category.id
-    posts = Post.objects.filter(category=category_id)
+    posts = Post.objects.filter(topic__category=category_id)
     context = {'posts': posts, 'category': category}
     return render(request, "catalog/category.html", context)
 

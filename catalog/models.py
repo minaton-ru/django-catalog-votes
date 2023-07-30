@@ -19,8 +19,7 @@ class Category(models.Model):
 class Topic(models.Model):
     name = models.CharField('topic', max_length=20)
     slug = models.SlugField()
-    category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT,
-                                 null=True, default=1)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['id']
@@ -32,16 +31,14 @@ class Topic(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(Profile, on_delete=models.CASCADE,
+    author = models.ForeignKey(Profile, on_delete=models.SET_NULL,
                                null=True, blank=True)
     text = models.TextField(max_length=2000)
     fromplace = models.TextField(max_length=50)
     image = models.ImageField(upload_to="uploads/%Y/%m/%d/",
                               null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT,
-                                 null=True, default=1)
-    topic = models.ForeignKey(Topic, on_delete=models.SET_DEFAULT,
-                              null=True, default=1)
+    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL,
+                              null=True, blank=True)
     published = models.DateTimeField(auto_now_add=True)
     upvotes = models.ManyToManyField(User, related_name='post_upvotes',
                                      blank=True)

@@ -1,16 +1,16 @@
 from django.forms import ModelForm, FileInput
 from .models import Post
 
+
 class NewPostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ["text", "fromplace", "image", "category", "topic"]
+        fields = ["text", "fromplace", "image", "topic"]
         labels = {
             'text': 'Надпись',
             'fromplace': 'Откуда (источник)',
             'image': 'Картинка',
-            'category': 'Выберите общую категорию',
-            'topic': 'Выберите тему из категории',
+            'topic': 'Выберите тему',
         }
         widgets = {
             'image': FileInput(),
