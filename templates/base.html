@@ -1,5 +1,6 @@
 {% load static %}
 {% load account %}
+{% load catalog_tags %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -17,6 +18,7 @@
   <a href="{% url 'account_login' %}">Логин</a>
   {% endif %}
   <p><a href="{% url 'index' %}">Главная</a> | <a href="{% url 'new_post' %}">Прислать надпись</a></p>
+  {% show_category_list %}
 </header>
 
 <div class="container content">

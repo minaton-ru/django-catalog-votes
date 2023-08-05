@@ -1,0 +1,5 @@
+<ul>
+    {% for category in all_categories_list %}
+        <li><a href="/{{ category.slug }}">{{ category.name }} </a></li>
+    {% endfor %}
+</ul>
