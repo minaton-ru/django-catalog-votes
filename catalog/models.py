@@ -19,7 +19,8 @@ class Category(models.Model):
 class Topic(models.Model):
     name = models.CharField('topic', max_length=20)
     slug = models.SlugField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                 related_name='topics')
 
     class Meta:
         ordering = ['id']
