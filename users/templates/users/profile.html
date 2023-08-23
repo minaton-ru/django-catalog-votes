@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль пользователя {{ profile.user.username }} - {{ block.super }} {% endblock %}
+{% block content %}
+<h1>Профиль пользователя {{ profile.user.username }}</h1>
+<p>Статус:</p>
+<p>Количество присланных надписей: {{ user_posts|length }}</p>
+<p>Присланные надписи:
+    {% for post in user_posts %}
+    <div class="card bg-transparent border-dark clearfix">
+      <div class="card-body">
+        <!-- responsive floated images -->
+        {% if post.image %}
+        <img src="{{ post.image.url }}" class="col-md-4 float-md-end mb-3 ms-md-3 img-fluid" alt="{{ post.fromplace }}">
+        {% else %}
+        <p></p>
+        {% endif %}
+        <p class="card-text">{{ post.text }}</p>
+        <p class="card-text">Откуда: {{ post.fromplace }}</p>
+        <p class="card-text">Тема: {{ post.topic }}</p>
+        <form action="{% url 'post_upvoting' post.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" name="upvoting" value="{{ post.id }}">
+            {{ post.get_total_upvotes }}
+          </button>
+        </form>
+        {{ post.get_votes_result }}
+        <form action="{% url 'post_downvoting' post.id %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" name="downvoting" value="{{ post.id }}">
+            {{ post.get_total_downvotes }}
+          </button>
+        </form>
+      </div>
+    </div>
+    {% empty %}
+      <p>Пользователь не прислал надписи</p>
+    {% endfor %}
+{% endblock %}
