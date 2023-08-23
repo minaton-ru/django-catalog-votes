@@ -14,7 +14,7 @@
     {% endif %}
     <p class="card-text">{{ post.text }}</p>
     <p class="card-text">Откуда: {{ post.fromplace }}</p>
-    <p class="card-text">Кто прислал: {{ post.author.name }}</p>
+    <p class="card-text">Кто прислал: {{ post.author.user.username|default:"аноним" }}</p>
     <p class="card-text">Тема: {{ post.topic }}</p>
     <form action="{% url 'post_upvoting' post.id %}" method="POST">
       {% csrf_token %}

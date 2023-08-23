@@ -15,8 +15,14 @@ class LastPosts(ListView):
 def new_post(request):
     if request.method == "POST":
         form = NewPostForm(request.POST, request.FILES)
+        if request.user.is_anonymous:
+            author = None
+        else:
+            author = request.user.profile
         if form.is_valid():
-            form.save()
+            post = form.save()
+            post.author = author
+            post.save()
             return redirect("/")
     else:
         form = NewPostForm()
