@@ -15,6 +15,8 @@ class LastPosts(ListView):
 def new_post(request):
     if request.method == "POST":
         form = NewPostForm(request.POST, request.FILES)
+        # Если пользователь не авторизован, то автор поста не указывается.
+        # Если авторизован - то в автора поста указываем профиль пользователя.
         if request.user.is_anonymous:
             author = None
         else:
