@@ -1,9 +1,9 @@
 <ul>
     {% for category in all_categories_list %}
-        <li><a href="/{{ category.slug }}">{{ category.name }}</a></li>
+        <li><a href="/{{ category.slug }}/">{{ category.name }}</a></li>
         <ul>
             {% for topic in category.topics.all %}
-            <li><a href="/{{ category.slug }}/{{ topic.slug }}">{{ topic.name }}</a></li>
+            <li><a href="/{{ category.slug }}/{{ topic.slug }}/">{{ topic.name }}</a></li>
             {% endfor %}
         </ul>
     {% endfor %}
