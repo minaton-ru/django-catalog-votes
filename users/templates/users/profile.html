@@ -3,6 +3,7 @@
 {% block title %}Профиль пользователя {{ profile.user.username }} - {{ block.super }} {% endblock %}
 {% block content %}
 <h1>Профиль пользователя {{ profile.user.username }}</h1>
+<p><img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}"></p>
 {% if moderator %}
     <p>Модератор: да</p>
 {% else %}

@@ -13,7 +13,7 @@
 
 <header class="container">
   {% if user.is_authenticated %}
-  <p>Welcome {{ user.username }}! <a href="{% url 'account_logout' %}">Выйти</a></p>
+  <p>Welcome <a href="{% url 'user_account' %}">{{ user.username }}</a>! <a href="{% url 'account_logout' %}">Выйти</a></p>
   {% else %}
   <a href="{% url 'account_login' %}">Логин</a>
   {% endif %}

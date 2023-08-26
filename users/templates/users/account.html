@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Аккаунт пользователя {{ profile.user.username }} - {{ block.super }} {% endblock %}
+{% block content %}
+<h1>Аккаунт пользователя {{ profile.user.username }}</h1>
+<p><img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}"></p>
+<p>Имя: {{ user.first_name|default:"-" }}</p>
+<p>Фамилия: {{ user.last_name|default:"-" }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Ник: {{ user.username }}</p>
+{% if moderator %}
+    <p>Модератор: да</p>
+{% else %}
+    <p>Модератор: нет</p>
+{% endif %}
+<p>Посмотреть <a href="{% url 'user_profile' profile.id %}">свой профиль</a></p>
+<p><a href="{% url 'account_change_password' %}">Изменить пароль</a></p>
+<p><a href="{% url 'account_email' %}">Изменить email</a></p>
+{% endblock %}
