@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.sites',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'catalog.apps.CatalogConfig',
@@ -101,11 +100,9 @@ AUTHENTICATION_BACKENDS = [
 
 LANGUAGE_CODE = 'en-us'
 
-SITE_ID = 1
-
 TIME_ZONE = 'Europe/Moscow'
 
-USE_I18N = True
+USE_I18N = False
 
 USE_TZ = True
 
@@ -115,7 +112,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-# LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/accounts/user/"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
