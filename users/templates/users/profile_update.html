@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Редактирование профиля пользователя {{ profile.user.username }} - {{ block.super }} {% endblock %}
+{% block content %}
+<h1>Профиль пользователя {{ profile.user.username }}</h1>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ user_form.as_div }}
+    {{ form.as_div }}
+    <input type="submit" value="Отправить">
+</form>
+{% endblock %}

@@ -7,14 +7,14 @@ class NewPostForm(ModelForm):
         model = Post
         fields = ["text", "fromplace", "image", "topic"]
         labels = {
-            'text': 'Надпись',
-            'fromplace': 'Откуда (источник)',
-            'image': 'Картинка',
-            'topic': 'Выберите тему',
+            "text": "Надпись",
+            "fromplace": "Откуда (источник)",
+            "image": "Картинка",
+            "topic": "Выберите тему",
         }
         widgets = {
-            'image': FileInput(),
+            "image": FileInput(),
         }
         help_texts = {
-            'image': 'Или надпись в виде картинки'
+            "image": "Или надпись в виде картинки"
         }
