@@ -18,6 +18,15 @@
   <a href="{% url 'account_login' %}">Логин</a>
   {% endif %}
   <p><a href="{% url 'index' %}">Главная</a> | <a href="{% url 'new_post' %}">Прислать надпись</a></p>
+  {% if messages %}
+      {% for message in messages %}
+      <div class="alert {{ message.tags }} alert-dismissible col-5"
+           role="alert"
+           id="alert">
+          <strong>{{ message }}</strong>
+      </div>
+      {% endfor %}
+  {% endif %}
   {% show_category_list %}
 </header>
 
