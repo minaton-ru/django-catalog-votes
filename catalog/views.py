@@ -8,7 +8,7 @@ from .forms import NewPostForm
 
 class LastPosts(ListView):
     context_object_name = "ten_last_posts"
-    queryset = Post.objects.filter(approved=True).order_by("-published")[:10]
+    queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=True).order_by("-published")[:10]  # noqa: E501
     template_name = "catalog/index.html"
 
 
@@ -62,7 +62,7 @@ def post_downvoting(request, post_id):
 def posts_list_category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     category_id = category.id
-    posts = Post.objects.filter(topic__category=category_id)
+    posts = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(topic__category=category_id)  # noqa: E501
     context = {'posts': posts, 'category': category}
     return render(request, "catalog/category.html", context)
 
@@ -71,6 +71,6 @@ def posts_list_topic(request, category_slug, topic_slug):
     category = get_object_or_404(Category, slug=category_slug)
     topic = get_object_or_404(Topic, slug=topic_slug)
     topic_id = topic.id
-    posts = Post.objects.filter(topic=topic_id)
+    posts = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(topic=topic_id)  # noqa: E501
     context = {'posts': posts, 'category': category, 'topic': topic}
     return render(request, "catalog/topic.html", context)

@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -14,10 +14,10 @@ def user_profile(request, pk):
     """
     Отображает публичный профиль пользователя и его присланные работы.
     """
-    profile = get_object_or_404(Profile, pk=pk)
+    profile = Profile.objects.select_related('user').get(pk=pk)
     # Если у пользователя есть права на изменение постов
     moderator = profile.user.has_perm('catalog.change_post')
-    user_posts = Post.objects.filter(author=profile)
+    user_posts = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(author=profile)  # noqa: E501
     context = {"profile": profile, "user_posts": user_posts,
                "moderator": moderator}
     return render(request, "users/profile.html", context)
