@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.LastPosts.as_view(), name="index"),
+    path("", views.LastPostsView.as_view(), name="index"),
     path("submit/", views.new_post, name="new_post"),
     path('upvote/<int:post_id>',
          views.post_upvoting, name='post_upvoting'),

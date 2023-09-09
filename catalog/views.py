@@ -6,7 +6,7 @@ from .models import Post, Category, Topic
 from .forms import NewPostForm
 
 
-class LastPosts(ListView):
+class LastPostsView(ListView):
     context_object_name = "ten_last_posts"
     queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=True).order_by("-published")[:10]  # noqa: E501
     template_name = "catalog/index.html"
