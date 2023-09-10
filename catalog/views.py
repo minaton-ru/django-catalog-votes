@@ -1,15 +1,41 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, UpdateView
+from django.forms import modelformset_factory
 from .models import Post, Category, Topic
-from .forms import NewPostForm
+from .forms import NewPostForm, NotApprovedPostForm
 
 
 class LastPostsView(ListView):
     context_object_name = "ten_last_posts"
-    queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=True).order_by("-published")[:10]  # noqa: E501
     template_name = "catalog/index.html"
+    queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=True).order_by("-published")[:10]  # noqa: E501
+
+
+NotApprovedListFormSet = modelformset_factory(Post,
+                                              form=NotApprovedPostForm,
+                                              edit_only=True)
+
+
+class NotApprovedListView(LoginRequiredMixin, UpdateView):
+    success_url = reverse_lazy("moderate")
+    template_name = "catalog/moderate_list.html"
+
+    def get(self, request):
+        queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=False).order_by("-published")  # noqa: E501
+        formset = NotApprovedListFormSet(queryset=queryset)
+        return render(request, self.template_name, {'formset': formset})
+
+    def post(self, request):
+        formset = NotApprovedListFormSet(request.POST, request.FILES)
+        if formset.is_valid():
+            formset.save()
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return render(request, self.template_name, {'formset': formset})
 
 
 def new_post(request):

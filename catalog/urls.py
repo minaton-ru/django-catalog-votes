@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path("", views.LastPostsView.as_view(), name="index"),
+    path("moderate/", views.NotApprovedListView.as_view(), name="moderate"),
     path("submit/", views.new_post, name="new_post"),
     path('upvote/<int:post_id>',
          views.post_upvoting, name='post_upvoting'),

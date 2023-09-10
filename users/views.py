@@ -32,7 +32,7 @@ def user_account(request):
     return render(request, "users/account.html", context)
 
 
-class ProfileUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Profile
     form_class = ProfileUpdateForm
     template_name = "users/profile_update.html"
