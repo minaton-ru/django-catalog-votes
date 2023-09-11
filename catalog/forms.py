@@ -1,6 +1,6 @@
+from django import forms
 from django.forms import ModelForm, FileInput
-from django.forms import modelformset_factory
-from .models import Post
+from .models import Post, Profile, Topic
 
 
 class NewPostForm(ModelForm):
@@ -22,6 +22,15 @@ class NewPostForm(ModelForm):
 
 
 class NotApprovedPostForm(ModelForm):
+    author = forms.ModelChoiceField(queryset=Profile.objects.all(),
+                                    disabled=True,
+                                    required=False)
+    text = forms.CharField(disabled=True)
+    fromplace = forms.CharField(disabled=True)
+    image = forms.ImageField(disabled=True, required=False)
+    topic = forms.ModelChoiceField(queryset=Topic.objects.all(),
+                                   disabled=True, required=False)
+
     class Meta:
         model = Post
         fields = ["text", "fromplace", "image",
@@ -30,8 +39,3 @@ class NotApprovedPostForm(ModelForm):
             "approved": "Можно публиковать без редактирования",
             "rejected": "Нельзя публиковать ни в каком виде"
         }
-
-
-NotApprovedPostFormSet = modelformset_factory(Post,
-                                              form=NotApprovedPostForm,
-                                              edit_only=True)

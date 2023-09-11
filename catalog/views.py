@@ -17,7 +17,8 @@ class LastPostsView(ListView):
 
 NotApprovedListFormSet = modelformset_factory(Post,
                                               form=NotApprovedPostForm,
-                                              edit_only=True)
+                                              edit_only=True,
+                                              extra=0)
 
 
 class NotApprovedListView(LoginRequiredMixin, UpdateView):
