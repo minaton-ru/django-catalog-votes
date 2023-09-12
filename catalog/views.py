@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView
 from django.forms import modelformset_factory
 from .models import Post, Category, Topic
-from .forms import NewPostForm, NotApprovedPostForm
+from .forms import NewPostForm, NotApprovedListForm
 
 
 class LastPostsView(ListView):
@@ -16,7 +16,7 @@ class LastPostsView(ListView):
 
 
 NotApprovedListFormSet = modelformset_factory(Post,
-                                              form=NotApprovedPostForm,
+                                              form=NotApprovedListForm,
                                               edit_only=True,
                                               extra=0)
 
@@ -26,7 +26,7 @@ class NotApprovedListView(LoginRequiredMixin, UpdateView):
     template_name = "catalog/moderate_list.html"
 
     def get(self, request):
-        queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=False).order_by("-published")  # noqa: E501
+        queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=False, rejected=False).order_by("-published")  # noqa: E501
         formset = NotApprovedListFormSet(queryset=queryset)
         return render(request, self.template_name, {'formset': formset})
 
