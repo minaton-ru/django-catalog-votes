@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.shortcuts import reverse
+
 from users.models import Profile
 
 
@@ -53,6 +56,14 @@ class Post(models.Model):
         verbose_name = 'Надпись'
         verbose_name_plural = 'Надписи'
 
+    def clean(self):
+        # Approved and Rejected at the same time are not allowed
+        if self.approved and self.rejected:
+            raise ValidationError(
+                "Нельзя одновременно ставить approved и rejected",
+                code="invalid"
+                )
+
     def get_total_upvotes(self):
         return self.upvotes.count()
 
@@ -64,3 +75,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.text
+
+    def get_absolute_url(self):
+        return reverse("moderate_post", kwargs={"pk": self.pk})
