@@ -7,9 +7,25 @@
   <p>Список надписей для модерации</p>  
   <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ formset.as_div }}
+    {{ formset.management_form }}
+    {% for form in formset %}
+        <div>
+        {{ form.non_field_errors }}
+        {{ form.id }}
+        {% for field in form.visible_fields %}
+          <div>
+          {{ field.errors }}
+          {{ field.label_tag }} {{ field }}
+          {% if field.help_text %}
+              <p class="help">{{ field.help_text|safe }}</p>
+          {% endif %}
+          </div>
+        {% endfor %}
+        <a href="/moderate/{{ form.id.value }}/">редактировать</a>
+        </div>
+    {% endfor %}
     <input type="submit" value="Отправить">
-</form>
+  </form>
 {% else %}
   <p>Нет надписей для модерации.</p>
 {% endif %}

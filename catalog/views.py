@@ -39,6 +39,14 @@ class NotApprovedListView(LoginRequiredMixin, UpdateView):
             return render(request, self.template_name, {'formset': formset})
 
 
+class NotApprovedPostView(LoginRequiredMixin, UpdateView):
+    success_url = reverse_lazy("moderate")
+    template_name = "catalog/moderate_post.html"
+    model = Post
+    fields = ["text", "fromplace", "image",
+              "topic", "approved", "rejected"]
+
+
 def new_post(request):
     if request.method == "POST":
         form = NewPostForm(request.POST, request.FILES)
