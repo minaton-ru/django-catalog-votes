@@ -64,13 +64,13 @@ class Post(models.Model):
                 code="invalid"
                 )
 
-    def get_total_upvotes(self):
+    def get_total_upvotes(self) -> int:
         return self.upvotes.count()
 
-    def get_total_downvotes(self):
+    def get_total_downvotes(self) -> int:
         return self.downvotes.count()
 
-    def get_votes_result(self):
+    def get_votes_result(self) -> int:
         return self.upvotes.count() - self.downvotes.count()
 
     def __str__(self):

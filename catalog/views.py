@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView
 from django.forms import modelformset_factory
+
 from .models import Post, Category, Topic
 from .forms import NewPostForm, NotApprovedListForm
 
