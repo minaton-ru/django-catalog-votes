@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView
@@ -21,7 +21,8 @@ NotApprovedListFormSet = modelformset_factory(Post,
                                               extra=0)
 
 
-class NotApprovedListView(LoginRequiredMixin, UpdateView):
+class NotApprovedListView(PermissionRequiredMixin, UpdateView):
+    permission_required = "catalog.change_post"
     success_url = reverse_lazy("moderate")
     template_name = "catalog/moderate_list.html"
 
@@ -39,7 +40,8 @@ class NotApprovedListView(LoginRequiredMixin, UpdateView):
             return render(request, self.template_name, {'formset': formset})
 
 
-class NotApprovedPostView(LoginRequiredMixin, UpdateView):
+class NotApprovedPostView(PermissionRequiredMixin, UpdateView):
+    permission_required = "catalog.change_post"
     success_url = reverse_lazy("moderate")
     template_name = "catalog/moderate_post.html"
     model = Post
