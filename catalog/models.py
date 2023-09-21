@@ -31,7 +31,7 @@ class Topic(models.Model):
         verbose_name_plural = 'Темы'
 
     def __str__(self):
-        return self.name
+        return f"{self.category}, {self.name}"
 
 
 class Post(models.Model):

@@ -12,7 +12,7 @@ class NewPostForm(ModelForm):
             "text": "Надпись",
             "fromplace": "Откуда (источник)",
             "image": "Картинка",
-            "topic": "Выберите тему",
+            "topic": "Выберите категорию",
         }
         widgets = {
             "image": FileInput(),

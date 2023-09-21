@@ -22,7 +22,7 @@
         {% endif %}
         <p class="card-text">{{ post.text }}</p>
         <p class="card-text">Откуда: {{ post.fromplace }}</p>
-        <p class="card-text">Тема: {{ post.topic }}</p>
+        <p class="card-text">Категория: {{ post.topic }}</p>
         <form action="{% url 'post_upvoting' post.id %}" method="POST">
           {% csrf_token %}
           <button type="submit" name="upvoting" value="{{ post.id }}">
