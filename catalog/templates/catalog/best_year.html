@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %} Лучшее за {{ year|date:"Y" }} год - {{ block.super }} {% endblock %}
+{% block content %}
+
+<p>Лучшие надписи за {{ year|date:"Y" }} год</p>
+{% for post in best_year_posts %}
+<div class="card bg-transparent border-dark clearfix">
+  <div class="card-body">
+    <!-- responsive floated images -->
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="col-md-4 float-md-end mb-3 ms-md-3 img-fluid" alt="{{ post.fromplace }}">
+    {% else %}
+    <p></p>
+    {% endif %}
+    <p class="card-text">{{ post.text }}</p>
+    <p class="card-text">Откуда: {{ post.fromplace }}</p>
+    <p class="card-text">Кто прислал: {{ post.author.user.username|default:"аноним" }}</p>
+    <p class="card-text">Категория: {{ post.topic }}</p>
+    <form action="{% url 'post_upvoting' post.id %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" name="upvoting" value="{{ post.id }}">
+        {{ post.get_total_upvotes }}
+      </button>
+    </form>
+    {{ post.get_votes_result }}
+    <form action="{% url 'post_downvoting' post.id %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" name="downvoting" value="{{ post.id }}">
+        {{ post.get_total_downvotes }}
+      </button>
+    </form>
+  </div>
+</div>
+{% empty %}
+  <p>Не загрузились</p>
+{% endfor %}
+{% endblock %}

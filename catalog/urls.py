@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path("", views.LastPostsView.as_view(), name="index"),
+    path("best/<int:year>/", views.BestYearView.as_view(), name="best_year"),
     path("moderate/", views.NotApprovedListView.as_view(), name="moderate"),
     path("moderate/<int:pk>/",
          views.NotApprovedPostView.as_view(), name="moderate_post"),

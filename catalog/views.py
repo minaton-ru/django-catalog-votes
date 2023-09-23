@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView
 from django.forms import modelformset_factory
+from django.views.generic.dates import YearArchiveView
+from django.db.models import Count
 
 from .models import Post, Category, Topic
 from .forms import NewPostForm, NotApprovedListForm
@@ -14,6 +16,20 @@ class LastPostsView(ListView):
     context_object_name = "ten_last_posts"
     template_name = "catalog/index.html"
     queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=True).order_by("-published")[:10]  # noqa: E501
+
+
+class BestYearView(YearArchiveView):
+    """
+    Yearly archive with all posts in given year ordered by most voted.
+    """
+    date_field = "published"
+    context_object_name = "best_year_posts"
+    template_name = "catalog/best_year.html"
+    make_object_list = True
+
+    def get_queryset(self):
+        """Returns queryset with posts ordered by the likes and unlikes sum."""
+        return Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=True).annotate(votes_result=(Count('upvotes') - Count('downvotes'))).order_by('-votes_result')  # noqa: E501
 
 
 NotApprovedListFormSet = modelformset_factory(Post,
