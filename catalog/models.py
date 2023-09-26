@@ -35,7 +35,8 @@ class Topic(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(Profile, on_delete=models.SET_NULL,
+    author = models.ForeignKey(Profile, related_name='author',
+                               on_delete=models.SET_NULL,
                                null=True, blank=True)
     text = models.TextField(max_length=2000)
     fromplace = models.TextField(max_length=50)
@@ -44,6 +45,9 @@ class Post(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.SET_NULL,
                               null=True, blank=True)
     published = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(null=True, blank=True)
+    updatedby = models.ForeignKey(Profile, on_delete=models.CASCADE,
+                                  null=True, blank=True)
     upvotes = models.ManyToManyField(User, related_name='post_upvotes',
                                      blank=True)
     downvotes = models.ManyToManyField(User, related_name='post_downvotes',
