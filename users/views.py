@@ -18,7 +18,11 @@ def user_profile(request, pk):
     profile = Profile.objects.select_related('user').get(pk=pk)
     # Если у пользователя есть права на изменение постов
     moderator = profile.user.has_perm('catalog.change_post')
-    user_posts = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(author=profile)  # noqa: E501
+    user_posts = (
+        Post.objects.select_related('topic', 'author', 'author__user')
+        .prefetch_related('upvotes', 'downvotes')
+        .filter(author=profile)
+    )
     context = {"profile": profile, "user_posts": user_posts,
                "moderator": moderator}
     return render(request, "users/profile.html", context)

@@ -15,7 +15,12 @@ from .forms import NewPostForm, NotApprovedListForm
 class LastPostsView(ListView):
     context_object_name = "ten_last_posts"
     template_name = "catalog/index.html"
-    queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=True).order_by("-published")[:10]  # noqa: E501
+    queryset = (
+        Post.objects.select_related("topic", "author", "author__user")
+        .prefetch_related("upvotes", "downvotes")
+        .filter(approved=True)
+        .order_by("-published")[:10]
+    )
 
 
 class BestYearView(YearArchiveView):
@@ -29,7 +34,13 @@ class BestYearView(YearArchiveView):
 
     def get_queryset(self):
         """Returns queryset with posts ordered by the likes and unlikes sum."""
-        return Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=True).annotate(votes_result=(Count('upvotes') - Count('downvotes'))).order_by('-votes_result')  # noqa: E501
+        return (
+            Post.objects.select_related("topic", "author", "author__user")
+            .prefetch_related("upvotes", "downvotes")
+            .filter(approved=True)
+            .annotate(votes_result=(Count("upvotes") - Count("downvotes")))
+            .order_by("-votes_result")
+        )
 
 
 NotApprovedListFormSet = modelformset_factory(Post,
@@ -44,7 +55,12 @@ class NotApprovedListView(PermissionRequiredMixin, UpdateView):
     template_name = "catalog/moderate_list.html"
 
     def get(self, request):
-        queryset = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(approved=False, rejected=False).order_by("-published")  # noqa: E501
+        queryset = (
+            Post.objects.select_related('topic', 'author', 'author__user')
+            .prefetch_related('upvotes', 'downvotes')
+            .filter(approved=False, rejected=False)
+            .order_by("-published")
+        )
         formset = NotApprovedListFormSet(queryset=queryset)
         return render(request, self.template_name, {'formset': formset})
 
@@ -116,7 +132,11 @@ def post_downvoting(request, post_id):
 def posts_list_category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     category_id = category.id
-    posts = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(topic__category=category_id)  # noqa: E501
+    posts = (
+        Post.objects.select_related('topic', 'author', 'author__user')
+        .prefetch_related('upvotes', 'downvotes')
+        .filter(topic__category=category_id)
+    )
     context = {'posts': posts, 'category': category}
     return render(request, "catalog/category.html", context)
 
@@ -125,6 +145,10 @@ def posts_list_topic(request, category_slug, topic_slug):
     category = get_object_or_404(Category, slug=category_slug)
     topic = get_object_or_404(Topic, slug=topic_slug)
     topic_id = topic.id
-    posts = Post.objects.select_related('topic', 'author', 'author__user').prefetch_related('upvotes', 'downvotes').filter(topic=topic_id)  # noqa: E501
+    posts = (
+        Post.objects.select_related('topic', 'author', 'author__user')
+        .prefetch_related('upvotes', 'downvotes')
+        .filter(topic=topic_id)
+    )
     context = {'posts': posts, 'category': category, 'topic': topic}
     return render(request, "catalog/topic.html", context)
