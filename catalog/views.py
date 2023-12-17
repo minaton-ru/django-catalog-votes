@@ -13,6 +13,9 @@ from .forms import NewPostForm, NotApprovedListForm
 
 
 class LastPostsView(ListView):
+    """
+    Index view, returns ten last posts, ordered by publishing date.
+    """
     context_object_name = "ten_last_posts"
     template_name = "catalog/index.html"
     queryset = (
@@ -129,26 +132,49 @@ def post_downvoting(request, post_id):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-def posts_list_category(request, category_slug):
-    category = get_object_or_404(Category, slug=category_slug)
-    category_id = category.id
-    posts = (
-        Post.objects.select_related('topic', 'author', 'author__user')
-        .prefetch_related('upvotes', 'downvotes')
-        .filter(topic__category=category_id)
-    )
-    context = {'posts': posts, 'category': category}
-    return render(request, "catalog/category.html", context)
+class CategoryView(ListView):
+    """
+    All posts in category. Gets the category tag from URL.
+    """
+    context_object_name = "posts"
+    template_name = "catalog/category.html"
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, slug=self.kwargs["category_slug"])
+        category_id = self.category.id
+        queryset = (
+            Post.objects.select_related('topic', 'author', 'author__user')
+            .prefetch_related('upvotes', 'downvotes')
+            .filter(topic__category=category_id)
+        )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = self.category
+        return context
 
 
-def posts_list_topic(request, category_slug, topic_slug):
-    category = get_object_or_404(Category, slug=category_slug)
-    topic = get_object_or_404(Topic, slug=topic_slug)
-    topic_id = topic.id
-    posts = (
-        Post.objects.select_related('topic', 'author', 'author__user')
-        .prefetch_related('upvotes', 'downvotes')
-        .filter(topic=topic_id)
-    )
-    context = {'posts': posts, 'category': category, 'topic': topic}
-    return render(request, "catalog/topic.html", context)
+class TopicView(ListView):
+    """
+    All posts in topic. Gets topic slug and category slug from URL.
+    """
+    context_object_name = "posts"
+    template_name = "catalog/topic.html"
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, slug=self.kwargs["category_slug"])
+        self.topic = get_object_or_404(Topic, slug=self.kwargs["topic_slug"])
+        topic_id = self.topic.id
+        queryset = (
+            Post.objects.select_related('topic', 'author', 'author__user')
+            .prefetch_related('upvotes', 'downvotes')
+            .filter(topic=topic_id)
+        )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = self.category
+        context["topic"] = self.topic
+        return context

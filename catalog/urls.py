@@ -13,7 +13,7 @@ urlpatterns = [
     path('downvote/<int:post_id>',
          views.post_downvoting, name='post_downvoting'),
     path('<slug:category_slug>/',
-         views.posts_list_category, name="posts_list_category"),
+         views.CategoryView.as_view(), name="category_list"),
     path('<slug:category_slug>/<slug:topic_slug>/',
-         views.posts_list_topic, name="posts_list_topic"),
+         views.TopicView.as_view(), name="topic_list"),
 ]
